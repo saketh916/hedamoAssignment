@@ -21,12 +21,13 @@ const ProductCard = ({ product, addToCart }) => {
     <>
       {/* Product Card */}
       <div
-        className="bg-white p-4 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105 cursor-pointer relative group"
+        className="bg-white p-4 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105 cursor-pointer relative group flex flex-col"
         onClick={() => {
           setIsOpen(true);
           setCurrentImg(0);
         }}
       >
+        {/* Product Image */}
         <div className="w-full h-48 bg-gray-100 rounded-xl mb-3 flex items-center justify-center overflow-hidden">
           <img
             src={product.image}
@@ -35,7 +36,8 @@ const ProductCard = ({ product, addToCart }) => {
           />
         </div>
 
-        <h3 className="text-gray-600 font-semibold">{product.name}</h3>
+        {/* Info */}
+        <h3 className="text-gray-700 font-semibold truncate">{product.name}</h3>
         <p className="text-gray-600 font-medium">₹{product.price}</p>
 
         {/* ⭐ Always show rating in card */}
@@ -53,12 +55,13 @@ const ProductCard = ({ product, addToCart }) => {
           {product.description}
         </p>
 
+        {/* Add to Cart */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             addToCart(product);
           }}
-          className="mt-3 w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white py-2 rounded-lg hover:from-pink-600 hover:to-pink-700 transition"
+          className="mt-auto w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white py-2 rounded-lg hover:from-pink-600 hover:to-pink-700 transition"
         >
           Add to Cart
         </button>
