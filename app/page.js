@@ -31,13 +31,20 @@ export default function Home() {
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+        className="
+          p-6 
+          grid 
+          grid-cols-1 
+          sm:grid-cols-2 
+          lg:grid-cols-3 
+          xl:grid-cols-4 
+          gap-6
+        "
       >
         {products
           .filter(
             (p) =>
-              (selectedCategory === "Home" ||
-                p.category === selectedCategory) &&
+              (selectedCategory === "Home" || p.category === selectedCategory) &&
               p.name.toLowerCase().includes(searchQuery.toLowerCase())
           )
           .map((product) => (
