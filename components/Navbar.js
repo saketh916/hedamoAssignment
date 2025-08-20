@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { ShoppingCart, Search } from "lucide-react";
+import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import CartDrawer from "./CartDrawer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({
   setSelectedCategory,
@@ -12,6 +12,7 @@ export default function Navbar({
   onRemove,
 }) {
   const [cartOpen, setCartOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Home");
 
   const categories = ["Home", "Skincare", "Snacks & Beverages", "Shampoos", "Tablets"];
@@ -19,6 +20,7 @@ export default function Navbar({
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
     setSelectedCategory(cat);
+    setMenuOpen(false); // close menu after selecting (mobile UX)
   };
 
   return (
@@ -36,7 +38,7 @@ export default function Navbar({
           Hedamo <span className="animate-pulse">♡</span>
         </motion.div>
 
-        {/* Categories */}
+        {/* Categories (Desktop) */}
         <ul className="hidden sm:flex gap-6 font-medium">
           {categories.map((cat) => (
             <li
@@ -56,10 +58,10 @@ export default function Navbar({
           ))}
         </ul>
 
-        {/* Search + Cart */}
+        {/* Search + Cart + Hamburger */}
         <div className="flex items-center gap-4">
           {/* Search */}
-          <div className="flex items-center border border-white/40 rounded-lg px-2 sm:px-3 py-1 bg-white/20 backdrop-blur-md">
+          <div className="hidden sm:flex items-center border border-white/40 rounded-lg px-2 sm:px-3 py-1 bg-white/20 backdrop-blur-md">
             <Search className="w-5 h-5 text-white/80" />
             <input
               type="text"
@@ -86,8 +88,48 @@ export default function Navbar({
               </motion.span>
             )}
           </div>
+
+          {/* Hamburger (Mobile) */}
+          <div className="sm:hidden cursor-pointer" onClick={() => setMenuOpen((prev) => !prev)}>
+            {menuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </div>
         </div>
       </nav>
+
+      {/* Mobile Dropdown Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className="sm:hidden bg-gradient-to-r from-purple-500 via-pink-500 to-red-400 text-white shadow-md overflow-hidden"
+          >
+            <ul className="flex flex-col items-center gap-4 py-4 font-medium">
+              {categories.map((cat) => (
+                <li
+                  key={cat}
+                  className={`cursor-pointer ${activeCategory === cat ? "font-bold" : ""}`}
+                  onClick={() => handleCategoryClick(cat)}
+                >
+                  {cat}
+                </li>
+              ))}
+              {/* Mobile Search */}
+              <div className="flex items-center border border-white/40 rounded-lg px-2 py-1 bg-white/20 backdrop-blur-md mt-2 w-4/5">
+                <Search className="w-5 h-5 text-white/80" />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="outline-none bg-transparent px-2 text-white placeholder-white/60 flex-1"
+                />
+              </div>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <CartDrawer
         isOpen={cartOpen}
